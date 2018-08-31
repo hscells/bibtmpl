@@ -8,6 +8,8 @@ import (
 	"io"
 	"bytes"
 	"strings"
+	"sort"
+	"strconv"
 )
 
 // Parse reads a file and parses it into a BibTex record.
@@ -40,6 +42,12 @@ func Parse(filename string) (*bibtex.BibTex, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	sort.Slice(parsed.Entries, func(i, j int) bool {
+		x, _ := strconv.Atoi(parsed.Entries[i].Fields["Year"].String())
+		y, _ := strconv.Atoi(parsed.Entries[j].Fields["Year"].String())
+		return x > y
+	})
 
 	return parsed, nil
 }
