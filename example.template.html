@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Example Usage</title>
+</head>
+<body>
+{{ range .Entries }}
+<div>
+    <span>{{ index .Fields "Author" }}</span>.
+    <span>{{index .Fields "Year"}}</span>.
+    <span>{{ index .Fields "Title"}}</span>.
+    <span>{{ index .Fields "Booktitle"}}</span>
+</div>
+{{ end }}
+</body>
+</html>
