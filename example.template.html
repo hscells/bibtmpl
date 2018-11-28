@@ -9,8 +9,9 @@
 <div>
     <span>{{ index .Fields "Author" }}</span>.
     <span>{{ index .Fields "Year"}}</span>.
-    <span>{{ index .Fields "Title"}}</span>.
-    <span>{{ index .Fields "Booktitle"}}</span>.
+{{ if index .Fields "Url" }}<a href="{{ index .Fields "Url" }}">{{ index .Fields "Title"}}</a>.
+{{ else }}    <span>{{ index .Fields "Title"}}</span>.
+{{ end }}    <span>{{ index .Fields "Booktitle"}}</span>.
 </div>
 {{ end }}
 </body>

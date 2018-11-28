@@ -1,16 +1,20 @@
 package bibtmpl
 
 import (
-	"github.com/nickng/bibtex"
-	"os"
-	"html/template"
-	"io/ioutil"
-	"io"
 	"bytes"
-	"strings"
+	"fmt"
+	"github.com/nickng/bibtex"
+	"html/template"
+	"io"
+	"io/ioutil"
+	"os"
 	"sort"
 	"strconv"
+	"strings"
 )
+
+const fieldYear = "Year"
+const fieldUrl = "Url"
 
 // Parse reads a file and parses it into a BibTex record.
 func Parse(filename string) (*bibtex.BibTex, error) {
@@ -43,9 +47,17 @@ func Parse(filename string) (*bibtex.BibTex, error) {
 		return nil, err
 	}
 
+	// Ensure each entry has a `Year`, and warn if if does not.
+	for _, entry := range parsed.Entries {
+		if _, ok := entry.Fields[fieldYear]; !ok {
+			fmt.Printf("[WARN] entry %s does not have a `Year` field (will render incorrectly)\n", entry.CiteName)
+			entry.Fields[fieldYear] = bibtex.NewBibConst("0000")
+		}
+	}
+
 	sort.Slice(parsed.Entries, func(i, j int) bool {
-		x, _ := strconv.Atoi(parsed.Entries[i].Fields["Year"].String())
-		y, _ := strconv.Atoi(parsed.Entries[j].Fields["Year"].String())
+		x, _ := strconv.Atoi(parsed.Entries[i].Fields[fieldYear].String())
+		y, _ := strconv.Atoi(parsed.Entries[j].Fields[fieldYear].String())
 		return x > y
 	})
 
